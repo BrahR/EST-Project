@@ -3,7 +3,7 @@ type InputLabelProps = {
   label: string;
 };
 
-export function InputLabel({ id, label }: InputLabelProps) {
+export default function InputLabel({ id, label }: InputLabelProps) {
   return (
     <label
       htmlFor={id}
