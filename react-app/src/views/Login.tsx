@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { InputLabel } from "../components/InputLabel";
-import TextInput from "../components/TextInput";
+import InputLabel from "@/components/InputLabel";
+import TextInput from "@/components/TextInput";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
@@ -28,14 +28,14 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex justify-center h-screen items-center">
+      <div className="flex justify-center h-screen items-center bg-white border border-gray-200 rounded-lg shadow ">
         <form
           className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 w-2/5"
           onSubmit={handleSubmit}
         >
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your account
+              Se connecter à votre compte
             </h2>
           </div>
 
@@ -66,43 +66,12 @@ export default function Login() {
                 style={{ display: loadingSpinner ? "inline-block" : "none" }}
                 className="d-loading d-loading-spinner"
               ></span>
-              <span hidden={loadingSpinner}>Sign in</span>
+              <span hidden={loadingSpinner}>S'authentifier</span>
             </button>
           </div>
         </form>
       </div>
       <Toaster />
     </>
-    // <form className=" d-flex flex-column" onSubmit={handleSubmit}>
-    //     <div className="mb-3">
-    //         <h3 className="text-danger">{error}</h3>
-    //     </div>
-
-    //     <div className="mb-3">
-    //         <label className="form-label">Identifiant</label>
-    //         <input
-    //             type="text"
-    //             className="form-control"
-    //             value={username}
-    //             onChange={(e) => {
-    //                 setUsername(e.target.value);
-    //             }}
-    //         />
-    //     </div>
-    //     <div className="mb-3">
-    //         <label className="form-label">Mot de passe</label>
-    //         <input
-    //             type="password"
-    //             className="form-control"
-    //             value={password}
-    //             onChange={(e) => {
-    //                 setPassword(e.target.value);
-    //             }}
-    //         />
-    //     </div>
-    //     <button type="submit" className="btn btn-dark">
-    //         S'authentifier
-    //     </button>
-    // </form>
   );
 }
