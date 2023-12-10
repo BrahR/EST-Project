@@ -17,7 +17,7 @@ export default function Login() {
     // show loading spinner
     setTimeout(() => {
       if (username === "admin" && password === "admin") {
-        navigate("/app/dashboard");
+        navigate("/dashboard");
         return;
       }
 

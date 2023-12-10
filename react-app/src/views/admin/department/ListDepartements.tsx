@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 // import { DepartementType } from "@/types/modals";
 import DataTableView from "@/components/DataTable";
+import TableData from "@/components/TableData"
+
 
 // const Modifier = (index: number, nom: string, desc: string) => {
 //   return (
@@ -96,28 +98,20 @@ import DataTableView from "@/components/DataTable";
 
 const mockData = [
   {
-    Name: "Tiger Nixon",
-    Position: "System Architect",
-    Office: "Edinburgh",
-    "Extn.": "5421",
-    "Start data": "2011/04/25",
-    Salary: "$320,800",
+    Nom: "Genie Informatique",
+    Description: "Bref description sur le départemnt Génie Informatique"
   },
   {
-    Name: "Garrett Winters",
-    Position: "Accountant",
-    Office: "Tokyo",
-    "Extn.": "8422",
-    "Start data": "2011/07/25",
-    Salary: "$170,750",
+    Nom: "Genie Mécanique",
+    Description: "Bref description sur le départemnt Génie Mécanique"
   },
   {
-    Name: "Ashton Cox",
-    Position: "Junior Technical Author",
-    Office: "San Francisco",
-    "Extn.": "1562",
-    "Start data": "2009/01/12",
-    Salary: "$86,000",
+    Nom: "Genie Logiciel",
+    Description: "Bref description sur le départemnt Génie Logiciel"
+  },
+  {
+    Nom: "Genie Electrique",
+    Description: "Bref description sur le départemnt Génie Electrique"
   },
   // Add more data as needed
 ];
@@ -125,14 +119,18 @@ const mockData = [
 export default function Departement() {
   return (
     <div>
-      <div className="d-flex justify-content-between mb-5">
-        <h1>Departement</h1>
-        <Link to="/addDepartement" className="btn btn-dark h-25">
-          Ajouter un Departement
-        </Link>
+      <div className="d-flex mb-5" style={{border:'1px solid green'}}> 
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' ,border:'1px solid blue'}} className="flex-grow">Liste des Départements</h1>
+        <div style={{border:'1px solid red'}}>
+          <Link to="/addDepartement" className="btn btn-dark h-25">
+            Ajouter un Departement
+          </Link>
+        </div>
+
       </div>
       <div>
-        <DataTableView data={mockData.map((item) => Object.values(item))} />
+        {/* <DataTableView data={mockData.map((item) => Object.values(item))} /> */}
+        <TableData />
         {/* <DepartsList list={departs} /> */}
       </div>
     </div>

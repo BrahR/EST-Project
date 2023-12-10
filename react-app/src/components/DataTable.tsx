@@ -15,12 +15,8 @@ export default function DataTableView(props: { data: unknown[] }) {
     const table = $(tableRef.current).DataTable({
       data: props.data,
       columns: [
-        { title: "Name" },
-        { title: "Position" },
-        { title: "Office" },
-        { title: "Extn." },
-        { title: "Start data" },
-        { title: "Salary" },
+        { title: "Nom" },
+        { title: "Description" },
       ],
       destroy: true,
     });

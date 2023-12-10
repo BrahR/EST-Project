@@ -14,11 +14,7 @@ export default function Dashboard() {
   const navigation = [
     { name: "Dashboard", to: "/dashboard", icon: DashboardIcon },
     { name: "Departement", to: "/departement", icon: Departement },
-    {
-      name: "Chef de departement",
-      to: "/chef_departement",
-      icon: ChefDepartement,
-    },
+    { name: "Chef de departement", to: "/chef_departement", icon: ChefDepartement},
     { name: "Enseignant", to: "/enseignant", icon: Enseignant },
     { name: "Filière", to: "/filiere", icon: Filiere },
     { name: "Module", to: "/module", icon: Module },
