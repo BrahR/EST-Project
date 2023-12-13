@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "@/views/admin/Dashboard";
-import Departement from "@/views/admin/department/ListDepartements";
+import Departement from "./views/admin/department/ListDepartements";
 import Login from "@/views/Login";
 import DashboardLayout from "@/components/admin/DashboardLayout";
 import TableData from "@/components/TableData";
