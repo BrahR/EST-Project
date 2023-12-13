@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 // import { DepartementType } from "@/types/modals";
 import DataTableView from "@/components/DataTable";
 import TableData from "@/components/TableData"
+import ModalAdd from "@/components/ModalAdd";
 
 
 // const Modifier = (index: number, nom: string, desc: string) => {
@@ -119,14 +120,9 @@ const mockData = [
 export default function Departement() {
   return (
     <div>
-      <div className="d-flex mb-5" style={{border:'1px solid green'}}> 
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' ,border:'1px solid blue'}} className="flex-grow">Liste des Départements</h1>
-        <div style={{border:'1px solid red'}}>
-          <Link to="/addDepartement" className="btn btn-dark h-25">
-            Ajouter un Departement
-          </Link>
-        </div>
-
+      <div className="flex mb-5"> 
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#333'}} className="flex-grow">Liste des Départements</h1>
+        <ModalAdd/>
       </div>
       <div>
         {/* <DataTableView data={mockData.map((item) => Object.values(item))} /> */}
