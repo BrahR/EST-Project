@@ -1,10 +1,10 @@
 import DashboardIcon from "@/views/admin/assets/images/dashboard.png";
-import ChefDepartement from "@/views/admin/assets/images/chefD.png";
-import Departement from "@/views/admin/assets/images/department.png";
-import ElementModule from "@/views/admin/assets/images/elt_module.png";
-import Enseignant from "@/views/admin/assets/images/eneignant.png";
-import Filiere from "@/views/admin/assets/images/filiere.png";
-import Module from "@/views/admin/assets/images/module.png";
+import ChefDepartementIcon from "@/views/admin/assets/images/chefD.png";
+import DepartementIcon from "@/views/admin/assets/images/department.png";
+import ElementModuleIcon from "@/views/admin/assets/images/elt_module.png";
+import EnseignantIcon from "@/views/admin/assets/images/eneignant.png";
+import FiliereIcon from "@/views/admin/assets/images/filiere.png";
+import ModuleIcon from "@/views/admin/assets/images/module.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import "@/views/admin/assets/css/dashboard.css";
@@ -13,12 +13,20 @@ export default function Dashboard() {
   const location = useLocation();
   const navigation = [
     { name: "Dashboard", to: "/dashboard", icon: DashboardIcon },
-    { name: "Departement", to: "/departement", icon: Departement },
-    { name: "Chef de departement", to: "/chef_departement", icon: ChefDepartement},
-    { name: "Enseignant", to: "/enseignant", icon: Enseignant },
-    { name: "Filière", to: "/filiere", icon: Filiere },
-    { name: "Module", to: "/module", icon: Module },
-    { name: "Element de module", to: "/element_module", icon: ElementModule },
+    { name: "Departement", to: "/departement", icon: DepartementIcon },
+    {
+      name: "Chef de departement",
+      to: "/chef-departement",
+      icon: ChefDepartementIcon,
+    },
+    { name: "Enseignant", to: "/enseignant", icon: EnseignantIcon },
+    { name: "Filière", to: "/filiere", icon: FiliereIcon },
+    { name: "Module", to: "/module", icon: ModuleIcon },
+    {
+      name: "Element de module",
+      to: "/element-module",
+      icon: ElementModuleIcon,
+    },
   ];
 
   return (
