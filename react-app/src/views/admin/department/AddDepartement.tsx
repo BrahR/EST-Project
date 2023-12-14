@@ -1,9 +1,22 @@
 import Modal from "@/components/Modal";
 import { useState } from "react";
 import type { ReactElement } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { addDepartementMutation } from "@/atoms/departement";
+import { useAtom } from "jotai";
+
+type FormValues = {
+  name: string;
+  description: string;
+};
 
 export default function AddDepartement(): ReactElement {
+  const [{ mutate }] = useAtom(addDepartementMutation);
+  const { register, handleSubmit } = useForm();
   const [isOpen, setIsOpen] = useState(false);
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    mutate(data);
+  };
 
   function close() {
     setIsOpen(false);
@@ -54,7 +67,7 @@ export default function AddDepartement(): ReactElement {
             <span className="sr-only">Close modal</span>
           </button>
         </div>
-        <form className="p-4 md:p-5">
+        <form className="p-4 md:p-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
               <label
@@ -65,47 +78,11 @@ export default function AddDepartement(): ReactElement {
               </label>
               <input
                 type="text"
-                name="name"
-                id="name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 placeholder="Type product name"
-                required
+                {...register("nom", { required: true })}
               />
             </div>
-            {/* <div className="col-span-2 sm:col-span-1">
-                                        <label
-                                            htmlFor="price"
-                                            className="block mb-2 text-sm font-medium text-gray-900 "
-                                        >
-                                            Price
-                                        </label>
-                                        <input
-                                            type="number"
-                                            name="price"
-                                            id="price"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                            placeholder="$2999"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label
-                                            htmlFor="category"
-                                            className="block mb-2 text-sm font-medium text-gray-900 "
-                                        >
-                                            Category
-                                        </label>
-                                        <select
-                                            id="category"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        >
-                                            <option selected>Select category</option>
-                                            <option value="TV">TV/Monitors</option>
-                                            <option value="PC">PC</option>
-                                            <option value="GA">Gaming/Console</option>
-                                            <option value="PH">Phones</option>
-                                        </select>
-                                    </div> */}
             <div className="col-span-2">
               <label
                 htmlFor="description"
@@ -118,6 +95,7 @@ export default function AddDepartement(): ReactElement {
                 rows={4}
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Write product description here"
+                {...register("description", { required: true })}
               ></textarea>
             </div>
           </div>

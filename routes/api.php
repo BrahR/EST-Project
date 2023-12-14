@@ -18,7 +18,11 @@ use App\Http\Controllers\DepartementController;
 
 Route::post('/login', [UserController::class, 'Login']);
 Route::resource("departements", DepartementController::class)->only([
-    'index', 'show', 'store', 'update', 'destroy'
+    'index', 
+    'show', 
+    'store', 
+    'update', 
+    'destroy'
 ]);
 Route::middleware('auth:sanctum')->group(function () {
 
