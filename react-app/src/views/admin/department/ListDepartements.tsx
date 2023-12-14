@@ -2,34 +2,14 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import { departementsAtom } from "@/atoms/departement";
+import {
+  departementsAtom,
+  deleteDepartementMutation,
+} from "@/atoms/departement";
 import { useAtom } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
-
-const mockData: Departement[] = [
-  {
-    id: 1,
-    nom: "Genie Informatique",
-    description: "Bref description sur le départemnt Génie Informatique",
-  },
-  {
-    id: 2,
-    nom: "Genie Mécanique",
-    description: "Bref description sur le départemnt Génie Mécanique",
-  },
-  {
-    id: 3,
-    nom: "Genie Logiciel",
-    description: "Bref description sur le départemnt Génie Logiciel",
-  },
-  {
-    id: 4,
-    nom: "Genie Electrique",
-    description: "Bref description sur le départemnt Génie Electrique",
-  },
-  // Add more data as needed
-];
+import { useEffect } from "react";
 
 const columns: TableColumn<Departement>[] = [
   {
@@ -60,7 +40,7 @@ const columns: TableColumn<Departement>[] = [
     },
   },
   {
-    cell: () => <BasicMenu />,
+    cell: (row) => <BasicMenu id={row.id} />,
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -71,6 +51,11 @@ const columns: TableColumn<Departement>[] = [
 
 export default function ListDepartments() {
   const [{ data, isPending, isError }] = useAtom(departementsAtom);
+
+  console.log(data);
+  useEffect(() => {
+    console.log("we");
+  });
 
   return (
     <div>
@@ -128,7 +113,10 @@ export default function ListDepartments() {
         </ol>
       </nav>
       <div>
-        <DataTable data={mockData} columns={columns} filter={"nom"} />
+        {isPending && <div>Loading...</div>}
+        {isError && <div>Error...</div>}
+        {data && <DataTable data={data} columns={columns} filter={"nom"} />}
+        {/* <DataTable data={data} columns={columns} filter={"nom"} /> */}
         {/* <DataTableView data={mockData.map((item) => Object.values(item))} /> */}
         {/* <TableData /> */}
         {/* <DepartsList list={departs} /> */}
