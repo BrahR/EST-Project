@@ -1,29 +1,78 @@
-import { useEffect, useRef } from "react";
-import $ from "jquery";
-import DataTables from "datatables.net";
-import "datatables.net-dt/css/jquery.dataTables.min.css";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { useState } from "react";
+import { useMemo } from "react";
+import FilterComponent from "./FilterComponent";
 
-$.DataTable = DataTables;
+const customStyles = {
+  headRow: {
+    style: {
+      border: "none",
+    },
+  },
+  headCells: {
+    style: {
+      color: "#202124",
+      fontSize: "14px",
+    },
+  },
+  rows: {
+    highlightOnHoverStyle: {
+      backgroundColor: "#caf0f8",
+      borderBottomColor: "#FFFFFF",
+      borderRadius: "10px",
+      outline: "1px solid #FFFFFF",
+    },
+  },
+  pagination: {
+    style: {
+      border: "none",
+    },
+  },
+};
 
-export default function DataTableView(props: { data: unknown[] }) {
-  const tableRef = useRef(
-    null as never
-  ) as React.MutableRefObject<HTMLTableElement>;
+export default function DataTableView<T extends object>(props: {
+  data: T[];
+  columns: TableColumn<T>[];
+  filter: Only<T, string>;
+}) {
+  const [filterText, setFilterText] = useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const filteredItems = props.data.filter(
+    (item) =>
+      item[props.filter] &&
+      (item[props.filter] as string)
+        .toLowerCase()
+        .includes(filterText.toLowerCase())
+  );
 
-  useEffect(() => {
-    console.log(props.data);
-    const table = $(tableRef.current).DataTable({
-      data: props.data,
-      columns: [
-        { title: "Nom" },
-        { title: "Description" },
-      ],
-      destroy: true,
-    });
-    return function () {
-      console.log("Table destroyed");
-      table.destroy();
+  const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
     };
-  }, [props]);
-  return <table className="display" width="100%" ref={tableRef}></table>;
+
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterText}
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
+
+  return (
+    <DataTable
+      columns={props.columns}
+      data={filteredItems}
+      pagination
+      subHeader
+      subHeaderComponent={subHeaderComponentMemo}
+      persistTableHead
+      customStyles={customStyles}
+      highlightOnHover
+      pointerOnHover
+    />
+  );
 }
