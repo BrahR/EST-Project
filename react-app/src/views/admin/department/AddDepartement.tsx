@@ -6,7 +6,7 @@ import { addDepartementMutation } from "@/atoms/departement";
 import { useAtom } from "jotai";
 
 type FormValues = {
-  name: string;
+  nom: string;
   description: string;
 };
 
