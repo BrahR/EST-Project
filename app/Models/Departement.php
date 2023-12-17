@@ -14,7 +14,7 @@ class Departement extends Model
     
     protected $fillable = [
         'nom',
-        'description',
+        'description'
     ];
 
     public function user(){
@@ -24,5 +24,7 @@ class Departement extends Model
     public function filieres(){
         return $this->hasMany(Filiere::class);
     }
+
+    
 
 }
