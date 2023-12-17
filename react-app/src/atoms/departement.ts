@@ -7,8 +7,8 @@ import type { Departement } from "@/types/modals";
 const idDepartement = atom(0);
 
 const fetchDepartements = async () => {
-  const { data } = await axiosInstance.get("/departements");
-  return data.departements;
+  const {data} = await axiosInstance.get("/departements");
+  return data.departement;
 };
 
 const addDepartement = async (departement: Departement) => {
