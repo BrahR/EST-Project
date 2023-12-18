@@ -29,7 +29,8 @@ class DepartementController extends Controller
             'description'=>'required'
         ]);
         $departement=Departement::create([
-            'nom', 'description'
+            'nom'=>$validatedData['nom'], 
+            'description'=>$validatedData['description']
         ]);
         return response()->json(['departement' => $departement]);
 

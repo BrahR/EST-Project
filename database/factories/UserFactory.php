@@ -11,7 +11,7 @@ use Faker\Generator as Faker;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-    class UserFactory extends Factory
+class UserFactory extends Factory
 {
     protected $model = \App\Models\User::class;
 
@@ -20,7 +20,7 @@ use Faker\Generator as Faker;
         return [
             'nom' => $this->faker->lastName,
             'prenom' => $this->faker->firstName,
-            'role' => $this->faker->randomElement(['admin', 'chef_de_departement', 'enseignant']),
+            'role' => $this->faker->randomElement(['chef_de_departement', 'enseignant']),
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // You may want to use Hash::make() for real passwords

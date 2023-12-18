@@ -20,14 +20,17 @@ class FiliereController extends Controller
             'departement_id' =>  'required|integer'
         ]);
         $filiere=Filiere::create([
-            'nom', 'description', 'departement_id'
+            'nom' =>$validatedData['nom'],
+            'description' =>$validatedData['description'],
+            'departement_id' =>$validatedData['departement_id']
         ]);
+        
         return response()->json(["filiere"=>$filiere]);
     }
 
    
     public function show(string $id){
-        $filiere=Filiere::with('departement:id, nom')->find($id);
+        $filiere=Filiere::with('departement:id,nom')->find($id);
         if(!empty($filiere)){
             return response()->json(["filiere" => $filiere]);
         }else{
@@ -37,17 +40,17 @@ class FiliereController extends Controller
 
    
     public function update(Request $request, string $id){
-        $filiere=Filiere::with('departement:id, nom')->find($id);
+        $filiere=Filiere::with('departement:id,nom')->find($id);
         if(!empty($filiere)){
-            $validatedData=request()->validate([
+            $validatedData=$request->validate([
                 'nom'=>'required|string',
                 'description'=>'required',
                 'departement_id'=>'required|integer'
             ]);
             $filiere->nom=$validatedData['nom'];
-            $filiere->descriptiom=$validatedData['description'];
+            $filiere->description=$validatedData['description'];
             $filiere->departement_id=$validatedData['departement_id'];
-            $filiere->save;
+            $filiere->save();
             return response()->json(["filiere" => $filiere]);
         }else{
             return response()->json(["message" => "Filiere not found"]);
@@ -58,7 +61,7 @@ class FiliereController extends Controller
     public function destroy(string $id){
         $filiere=Filiere::find($id);
         if($filiere->delete()){
-            return response()->json(["filiere"=>$filiere]);
+            return response()->json(["message"=>"succes"]);
         }else{
             return response()->json(["message"=>"Deletion failed"]);
         }

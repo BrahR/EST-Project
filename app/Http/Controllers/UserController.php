@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             "email" => "required|string|email",
-            "pwd" => "required"
+            "pwd" => "required|min:8"
         ]);
 
         $user = User::where('email', $validatedData['email'])->first();
