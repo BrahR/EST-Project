@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Filiere;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\DepartementController;
 
 /*
@@ -17,12 +19,21 @@ use App\Http\Controllers\DepartementController;
 */
 
 Route::post('/login', [UserController::class, 'Login']);
-Route::resource("/departement", DepartementController::class)->only([
-    'index', 'show', 'store', 'update', 'destroy'
-]);
+Route::get('/hi', function () {
+    return "hi";
+});
+
+
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::resource("/departement", DepartementController::class)->only([
+        'index', 'show', 'store', 'update', 'destroy'
+    ]);
+    Route::resource("/filiere", FiliereController::class)->only([
+        'index', 'show', 'store', 'update', 'destroy'
+    ]);
 });

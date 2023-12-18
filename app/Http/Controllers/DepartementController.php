@@ -15,11 +15,11 @@ class DepartementController extends Controller
     }
 
     public function show($id){
-        $departement=Departement::findOrFail($id);
+        $departement=Departement::find($id);
         if(!empty($departement)){
-            return response()->json($departement);
+            return response()->json();
         }else{
-            return response()->json(["message"=>"Département not found"]);
+            return response()->json(["message"=>"Departement not found"]);
         }
     }
 
@@ -36,29 +36,33 @@ class DepartementController extends Controller
     }
 
     public function update(Request $request, $id){
-        $departement=Departement::findOrFail($id);
-        $validatedData=$request->validate([
-            'titre'=> "string|required",
-            'description'=>'required'
-        ]);
+        $departement=Departement::find($id);
+        if(!empty($filiere)){
+            $validatedData=$request->validate([
+                'titre'=> "string|required",
+                'description'=>'required',
+            ]);
+            $departement->nom=$validatedData['titre'];
+            $departement->description=$validatedData['description'];
+            $departement->save();
+            return response()->json(['departement' => $departement]);
+        }else{
+            return response()->json(["message" => "Filiere not found"]);
+        }
 
-        $departement->nom=$validatedData['titre'];
-        $departement->description=$validatedData['description'];
-
-        $departement->save();
-
-        return response()->json(['departement' => $departement]);
 
     }
     public function destroy($id){
-        $departement=Departement::findOrFail($id);
+        $departement=Departement::find($id);
         if($departement->delete()){
-            return response()->json(["message => success"]);
+            return response()->json(["message" => "success"]);
         }else{
-            return response()->json(["message => fail"]);
+            return response()->json(["message" => "Deletion failed"]);
         }
     }
-    
 
 }
+
+
+
 
