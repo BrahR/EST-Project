@@ -1,7 +1,9 @@
 // export default the departement type
 
-export type DepartementType = {
+type Departement = {
   id: number;
   nom: string;
   description: string;
 };
+
+export default Departement;

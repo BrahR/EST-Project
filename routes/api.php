@@ -19,11 +19,13 @@ use App\Http\Controllers\DepartementController;
 */
 
 Route::post('/login', [UserController::class, 'Login']);
-Route::get('/hi', function () {
-    return "hi";
-});
-
-
+Route::resource("departements", DepartementController::class)->only([
+    'index', 
+    'show', 
+    'store', 
+    'update', 
+    'destroy'
+]);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', function (Request $request) {

@@ -1,3 +1,3 @@
-import { DepartementType } from "./DepartementType";
+import type Departement from "@/types/modals/Departement";
 
-export { DepartementType };
+export type { Departement };
