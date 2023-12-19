@@ -15,6 +15,7 @@ class Departement extends Model
     protected $fillable = [
         'nom',
         'description',
+        'user_id'
     ];
 
     public function user(){

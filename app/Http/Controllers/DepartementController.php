@@ -11,7 +11,7 @@ class DepartementController extends Controller
 
     public function index(){
         $departement=Departement::all();
-        return response()->json(['departement' => $departement]);
+        return response()->json(['departements' => $departement]);
     }
 
     public function show($id){
@@ -28,9 +28,8 @@ class DepartementController extends Controller
             'nom'=> "string|required",
             'description'=>'required'
         ]);
-        $departement=Departement::create([
-            'nom', 'description'
-        ]);
+        $validatedData['user_id'] = 1;
+        $departement=Departement::create($validatedData);
         return response()->json(['departement' => $departement]);
 
     }
