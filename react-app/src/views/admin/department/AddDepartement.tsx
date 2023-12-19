@@ -4,18 +4,19 @@ import type { ReactElement } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { addDepartementMutation } from "@/atoms/departement";
 import { useAtom } from "jotai";
+import { Departement } from "@/types/modals";
 
 type FormValues = {
-  name: string;
+  nom: string;
   description: string;
 };
 
 export default function AddDepartement(): ReactElement {
   const [{ mutate }] = useAtom(addDepartementMutation);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    mutate(data);
+    mutate(data as Departement);
   };
 
   function close() {
