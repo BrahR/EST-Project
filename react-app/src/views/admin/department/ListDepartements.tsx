@@ -10,6 +10,8 @@ import { useAtom } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
 import { useEffect } from "react";
+import Loading from "@/components/Loading";
+import Error from "@/components/Error";
 
 const columns: TableColumn<Departement>[] = [
   {
@@ -113,13 +115,9 @@ export default function ListDepartments() {
         </ol>
       </nav>
       <div>
-        {isPending && <div>Loading...</div>}
-        {isError && <div>Error...</div>}
+        {isPending && <Loading />}
+        {isError && Error("Could not get the corresponding data. Check if the server is up!")}
         {data && <DataTable data={data} columns={columns} filter={"nom"} />}
-        {/* <DataTable data={data} columns={columns} filter={"nom"} /> */}
-        {/* <DataTableView data={mockData.map((item) => Object.values(item))} /> */}
-        {/* <TableData /> */}
-        {/* <DepartsList list={departs} /> */}
       </div>
     </div>
   );

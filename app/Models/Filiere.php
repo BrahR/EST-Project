@@ -17,7 +17,8 @@ class Filiere extends Model
 
     protected $fillable = [
         'nom',
-        'description'
+        'description',
+        'departement_id'
     ];
     public function departement(){
         return $this->belongsTo(Departement::class);

@@ -28,6 +28,9 @@ class User extends Authenticatable
     public function departement(){
         return $this->hasOne(Departement::class);
     }
+    public function elements(){
+        return $this->hasMany(Element::class);
+    }
     public function absences(){
         return $this->hasMany(Absence::class);
     }

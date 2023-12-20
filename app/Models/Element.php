@@ -13,13 +13,17 @@ class Element extends Model
     
     protected $fillable = [
         'nom',
-        'description'
+        'description',
+        'user_id',
+        'module_id'
     ];
 
-    public function modules(){
+    public function module(){
         return $this->belongsTo(Module::class);
     }
-
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
     public function absences(){
         return $this->hasMany(Absence::class);
     }
