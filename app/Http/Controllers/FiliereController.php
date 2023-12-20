@@ -40,7 +40,7 @@ class FiliereController extends Controller
 
    
     public function update(Request $request, string $id){
-        $filiere=Filiere::with('departement:id,nom')->find($id);
+        $filiere=Filiere::find($id);
         if(!empty($filiere)){
             $validatedData=$request->validate([
                 'nom'=>'required|string',

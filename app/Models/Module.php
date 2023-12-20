@@ -12,13 +12,14 @@ class Module extends Model
     use HasFactory;
     protected $fillable = [
         'nom',
-        'description'
+        'description',
+        'filiere_id'
     ];
 
-    public function filieres(){
+    public function filiere(){
         return $this->belongsTo(Filiere::class);
     }
-    public function element(){
+    public function elements(){
         return $this->hasMany(Element::class);
     }
 }
