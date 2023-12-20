@@ -15,13 +15,13 @@ export const derivedUser = atom(
   },
   (_get, set, newUser: User | null) => {
     if (newUser) {
-      localStorage.setItem("token", JSON.stringify(newUser.token));
+      sessionStorage.setItem("token", JSON.stringify(newUser.token));
       set(userAtom, { ..._get(userAtom), ...newUser });
       console.log("newUser", newUser);
     }
 
     if (!newUser) {
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       set(userAtom, {
         id: 0,
         name: "",
