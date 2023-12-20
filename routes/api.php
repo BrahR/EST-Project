@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::resource("/departement", DepartementController::class)->only([
+    Route::resource("/departements", DepartementController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
     Route::resource("/filiere", FiliereController::class)->only([

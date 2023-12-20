@@ -2,16 +2,14 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import {
-  departementsAtom,
-  deleteDepartementMutation,
-} from "@/atoms/departement";
+import { _departementsAtom } from "@/atoms/departement";
 import { useAtom } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
-import { useEffect } from "react";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
+import { useQuery } from "react-query";
+import axiosInstance from "@/axios";
 
 const columns: TableColumn<Departement>[] = [
   {
@@ -52,11 +50,14 @@ const columns: TableColumn<Departement>[] = [
 ];
 
 export default function ListDepartments() {
-  const [{ data, isPending, isError }] = useAtom(departementsAtom);
+  const [departements, setDepartment] = useAtom(_departementsAtom);
 
-  console.log(data);
-  useEffect(() => {
-    console.log("we");
+  const { isLoading, isError, data } = useQuery({
+    queryFn: () => axiosInstance.get("/departements").then((res) => res.data),
+    onSuccess: (data) => {
+      console.log(data.departements);
+      setDepartment(data.departements);
+    },
   });
 
   return (
@@ -115,9 +116,14 @@ export default function ListDepartments() {
         </ol>
       </nav>
       <div>
-        {isPending && <Loading />}
-        {isError && Error("Could not get the corresponding data. Check if the server is up!")}
-        {data && <DataTable data={data} columns={columns} filter={"nom"} />}
+        {isLoading && <Loading />}
+        {isError &&
+          Error(
+            "Could not get the corresponding data. Check if the server is up!"
+          )}
+        {data && (
+          <DataTable data={departements} columns={columns} filter={"nom"} />
+        )}
       </div>
     </div>
   );

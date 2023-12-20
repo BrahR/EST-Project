@@ -5,9 +5,10 @@ import axiosInstance from "@/axios";
 import type { Departement } from "@/types/modals";
 
 const idDepartement = atom(0);
+export const _departementsAtom = atom<Departement[]>([]);
 
 const fetchDepartements = async () => {
-  const {data} = await axiosInstance.get("/departements");
+  const { data } = await axiosInstance.get("/departements");
   return data.departement;
 };
 

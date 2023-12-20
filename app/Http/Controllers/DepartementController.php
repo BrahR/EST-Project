@@ -31,7 +31,7 @@ class DepartementController extends Controller
             'nom'=>$validatedData['nom'], 
             'description'=>$validatedData['description']
         ]);
-        return response()->json(['departement' => $departement]);
+        return response()->json(['departements' => $departement]);
 
     }
 
@@ -45,7 +45,7 @@ class DepartementController extends Controller
             $departement->nom=$validatedData['titre'];
             $departement->description=$validatedData['description'];
             $departement->save();
-            return response()->json(['departement' => $departement]);
+            return response()->json(['departements' => $departement]);
         }else{
             return response()->json(["message" => "Filiere not found"]);
         }

@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useAtom } from "jotai";
-import { tokenAtom } from "@/atoms/token";
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_URL}/api`,
@@ -10,9 +8,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const [token, setToken] = useAtom(tokenAtom);
+  const token = localStorage.getItem("token");
 
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  console.log("token" + token);
+
+  if (token) config.headers.Authorization = `Bearer ${JSON.parse(token)}`;
   config.headers.Accept = "application/json";
 
   return config;
