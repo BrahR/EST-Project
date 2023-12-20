@@ -23,7 +23,7 @@ class FiliereFactory extends Factory
     {
         $departement = Departement::inRandomOrder()->first();
         return [
-            'nom' =>  $this->faker->unique()->word,
+            'nom' => "Filière de ". $this->faker->unique()->word,
             'description' =>  $this->faker->sentence,
             'departement_id' => $departement->id ,
         ];
