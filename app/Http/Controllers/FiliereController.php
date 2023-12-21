@@ -43,7 +43,7 @@ class FiliereController extends Controller
         $filiere=Filiere::find($id);
         if(!empty($filiere)){
             $validatedData=$request->validate([
-                'nom'=>'required|string',
+                'nom'=>'req uired|string',
                 'description'=>'required',
                 'departement_id'=>'required|integer'
             ]);
@@ -60,7 +60,8 @@ class FiliereController extends Controller
    
     public function destroy(string $id){
         $filiere=Filiere::find($id);
-        if($filiere->delete()){
+        if(!empty($filiere)){
+            $filiere->delete();
             return response()->json(["message"=>"succes"]);
         }else{
             return response()->json(["message"=>"Deletion failed"]);
