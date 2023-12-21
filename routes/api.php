@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource("/departements", DepartementController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
-    Route::resource("/filiere", FiliereController::class)->only([
+    Route::resource("/filieres", FiliereController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
     Route::resource("/module", ModuleController::class)->only([
