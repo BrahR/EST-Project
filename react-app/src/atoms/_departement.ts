@@ -15,6 +15,11 @@ export const departementAtom = atom(
     const departements = _get(departementsAtom);
     const id = _get(idDepartement);
     if (update) {
+      console.log(
+        departements.map((departement) =>
+          departement.id === id ? { ...departement, ...update } : departement
+        )
+      );
       set(
         departementsAtom,
         departements.map((departement) =>

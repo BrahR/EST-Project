@@ -1,10 +1,12 @@
 import Modal from "@/components/Modal";
 import { useState } from "react";
 import type { ReactElement } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { addDepartementMutation } from "@/atoms/departement";
+import { useForm } from "react-hook-form";
 import { useAtom } from "jotai";
-import { Departement } from "@/types/modals";
+import { departementsAtom } from "@/atoms/_departement";
+import { useMutation } from "react-query";
+import axiosInstance from "@/axios";
+import { toast } from "react-hot-toast";
 
 type FormValues = {
   id: number;
@@ -13,12 +15,26 @@ type FormValues = {
 };
 
 export default function AddDepartement(): ReactElement {
-  const [{ mutate }] = useAtom(addDepartementMutation);
+  // const [{ mutate }] = useAtom(addDepartementMutation);
+  const [departements, setDepartement] = useAtom(departementsAtom);
+  // const setDepartement = useSetAtom(departementAtom);
   const { register, handleSubmit } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    mutate(data as Departement);
-  };
+
+  const add = useMutation({
+    mutationFn: (data: FormValues) => {
+      return axiosInstance.post(`/departements`, data).then((res) => res.data);
+    },
+    onSuccess: (data) => {
+      console.log("data", data);
+      setDepartement([...departements, data.departements]);
+      toast.success("Vous êtes connecté avec succès");
+    },
+    onError: () => {
+      console.log("looks like an error to me");
+      toast.error("Identifiant ou mot de passe incorrect");
+    },
+  });
 
   function close() {
     setIsOpen(false);
@@ -69,7 +85,10 @@ export default function AddDepartement(): ReactElement {
             <span className="sr-only">Close modal</span>
           </button>
         </div>
-        <form className="p-4 md:p-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="p-4 md:p-5"
+          onSubmit={handleSubmit((data) => add.mutate(data))}
+        >
           <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
               <label

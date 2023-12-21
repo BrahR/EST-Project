@@ -18,6 +18,7 @@ type FormValues = {
 export default function EditDepartement(): ReactElement {
   const [id, setId] = useAtom(idDepartement);
   const departement = useAtomValue(departementAtom);
+  const [, setDepartement] = useAtom(departementAtom);
   const { register, handleSubmit, reset } = useForm();
 
   const login = useMutation({
@@ -31,6 +32,7 @@ export default function EditDepartement(): ReactElement {
       // console.log("Logging in");
       // setUser(data);
       // navigate("/dashboard");
+      setDepartement(data.departements);
       toast.success("Vous êtes connecté avec succès");
     },
     onError: () => {
@@ -48,7 +50,7 @@ export default function EditDepartement(): ReactElement {
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     // mutate(data.id);
     login.mutate(data);
-    close();
+    // close();
   };
 
   function close() {
