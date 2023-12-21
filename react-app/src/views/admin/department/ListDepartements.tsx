@@ -2,14 +2,15 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import { _departementsAtom } from "@/atoms/departement";
-import { useAtom } from "jotai";
+import { departementsAtom, idDepartement } from "@/atoms/_departement";
+import { useAtom, useAtomValue } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { useQuery } from "react-query";
 import axiosInstance from "@/axios";
+import EditDepartement from "./EditDepartement";
 
 const columns: TableColumn<Departement>[] = [
   {
@@ -50,7 +51,8 @@ const columns: TableColumn<Departement>[] = [
 ];
 
 export default function ListDepartments() {
-  const [departements, setDepartment] = useAtom(_departementsAtom);
+  const [departements, setDepartment] = useAtom(departementsAtom);
+  // const id = useAtomValue(idDepartement);
 
   const { isLoading, isError, data } = useQuery({
     queryFn: () => axiosInstance.get("/departements").then((res) => res.data),
@@ -61,7 +63,7 @@ export default function ListDepartments() {
   });
 
   return (
-    <div>
+    <>
       <div className="flex mb-5">
         <h1
           style={{ fontSize: "24px", fontWeight: "bold", color: "#333" }}
@@ -125,6 +127,7 @@ export default function ListDepartments() {
           <DataTable data={departements} columns={columns} filter={"nom"} />
         )}
       </div>
-    </div>
+      <EditDepartement />
+    </>
   );
 }

@@ -1,10 +1,13 @@
 import Modal from "@/components/Modal";
 import axiosInstance from "@/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { idDepartement, updateDepartementMutation } from "@/atoms/departement";
-import { useAtom } from "jotai";
+import { updateDepartementMutation } from "@/atoms/departement";
+import { idDepartement, departementAtom } from "@/atoms/_departement";
+import { useAtom, useAtomValue } from "jotai";
+import { useMutation } from "react-query";
+import { toast } from "react-hot-toast";
 
 type FormValues = {
   id: number;
@@ -13,33 +16,51 @@ type FormValues = {
 };
 
 export default function EditDepartement(): ReactElement {
-  const [id] = useAtom(idDepartement);
-  const [{ mutate }] = useAtom(updateDepartementMutation);
-  const { register, handleSubmit } = useForm({
-    defaultValues: async () =>
-      // await fetch(`/api/departements/${id}`).then((res) => res.json()),
-      axiosInstance.get(`/departements/${id}`).then((res) => res.data),
+  const [id, setId] = useAtom(idDepartement);
+  const departement = useAtomValue(departementAtom);
+  const { register, handleSubmit, reset } = useForm();
+
+  const login = useMutation({
+    mutationFn: (data: FormValues) => {
+      return axiosInstance
+        .put(`/departements/${id}`, data)
+        .then((res) => res.data);
+    },
+    onSuccess: (data) => {
+      console.log("data", data);
+      // console.log("Logging in");
+      // setUser(data);
+      // navigate("/dashboard");
+      toast.success("Vous êtes connecté avec succès");
+    },
+    onError: () => {
+      console.log("looks like an error to me");
+      toast.error("Identifiant ou mot de passe incorrect");
+    },
   });
-  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    reset({
+      ...departement,
+    });
+  }, [departement, reset]);
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    mutate(data.id);
+    // mutate(data.id);
+    login.mutate(data);
     close();
   };
 
   function close() {
-    setIsOpen(false);
-  }
-
-  function open() {
-    setIsOpen(true);
+    setId(0);
   }
 
   return (
     <div>
-      <Modal isOpen={isOpen} closeModal={close}>
+      <Modal isOpen={!!id} closeModal={close}>
         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
           <h3 className="text-lg font-semibold text-gray-900">
-            Nouveau Département
+            Modifier Département
           </h3>
           <button
             type="button"
@@ -113,7 +134,7 @@ export default function EditDepartement(): ReactElement {
                 clipRule="evenodd"
               />
             </svg>
-            Ajouter
+            Modifier
           </button>
         </form>
       </Modal>

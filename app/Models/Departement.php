@@ -18,6 +18,22 @@ class Departement extends Model
         'user_id'
     ];
 
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($departement) { // before delete() method call this
+             $departement->filieres->each(function($filiere) {
+                $filiere->modules->each(function($module) {
+                    $module->elements->each(function($element) {
+                        $element->delete();
+                    });
+                    $module->delete();
+                });
+                $filiere->delete();
+             });
+        });
+    }
+
     public function user(){
         return $this->hasOne(User::class);
     }
