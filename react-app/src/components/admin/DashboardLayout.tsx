@@ -72,8 +72,8 @@ export default function Dashboard() {
                   </ul>
                 </li>
                 <li>
-                  <div className="awc awg awp ayc">Your teams</div>
-                  <ul role="list" className="ga lb abo">
+                  <div className="awc awg awp ayc">Autre</div>
+                  {/* <ul role="list" className="ga lb abo">
                     <li>
                       <a
                         href="#"
@@ -107,17 +107,17 @@ export default function Dashboard() {
                         <span className="adl">Workcation</span>
                       </a>
                     </li>
-                  </ul>
+                  </ul> */}
                 </li>
                 <li className="ge lp">
                   <a href="#" className="lx yz aag ark arz awa awg awp bah biv">
                     <img
                       className="og sj ads ajt"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
+                      src="https://unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt="Profile image"
                     />
                     <span className="t">Your profile</span>
-                    <span aria-hidden="true">Tom Cook</span>
+                    <span aria-hidden="true">EEEEEEE</span>
                   </a>
                 </li>
               </ul>
