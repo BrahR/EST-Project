@@ -37,7 +37,7 @@ class DepartementController extends Controller
 
     public function update(Request $request, $id){
         $departement=Departement::find($id);
-        if(!empty($filiere)){
+        if(!empty($departement)){
             $validatedData=$request->validate([
                 'titre'=> "string|required",
                 'description'=>'required',
@@ -54,7 +54,8 @@ class DepartementController extends Controller
     }
     public function destroy($id){
         $departement=Departement::find($id);
-        if($departement->delete()){
+        if(!empty($departement)){
+            $departement->delete();
             return response()->json(["message" => "success"]);
         }else{
             return response()->json(["message" => "Deletion failed"]);
