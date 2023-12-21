@@ -28,6 +28,6 @@ class DatabaseSeeder extends Seeder
         $departement = Departement::factory(20)->create();
         $filiere = Filiere::factory(20)->create();
         $module = Module::factory(20)->create();
-        $elment=Element::factory(20)->create();
+        $element=Element::factory(20)->create();
     }
 }

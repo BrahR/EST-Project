@@ -54,7 +54,8 @@ class DepartementController extends Controller
     }
     public function destroy($id){
         $departement=Departement::find($id);
-        if($departement->delete()){
+        if(!empty($departement)){
+            $departement->delete();
             return response()->json(["message" => "success"]);
         }else{
             return response()->json(["message" => "Deletion failed"]);
