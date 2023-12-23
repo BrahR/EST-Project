@@ -1,6 +1,6 @@
 import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
-import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
+//import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
 import DataTable from "@/components/DataTable";
 import { filieresAtom, idFiliere } from "@/atoms/filiere";
 import { useAtom, useAtomValue } from "jotai";
@@ -10,7 +10,7 @@ import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { useQuery } from "react-query";
 import axiosInstance from "@/axios";
-import EditFiliere from "./EditFiliere";
+//import EditFiliere from "./EditFiliere";
 
 const columns: TableColumn<Filiere>[] = [
   {
@@ -25,7 +25,6 @@ const columns: TableColumn<Filiere>[] = [
     name: "Nom",
     selector: (row) => row.nom,
     sortable: true,
-    grow: 2,
     style: {
       color: "#202124",
       fontSize: "14px",
@@ -42,7 +41,7 @@ const columns: TableColumn<Filiere>[] = [
   },
   {
     name: "Departement",
-    selector: (row) => row.departement,
+    selector: (row) => row.departement.nom,
     sortable: true,
     style: {
       color: "rgba(0,0,0,.54)",
@@ -64,8 +63,8 @@ export default function ListFilieres() {
   const { isLoading, isError, data } = useQuery({
     queryFn: () => axiosInstance.get("/filieres").then((res) => res.data),
     onSuccess: (data) => {
-      console.log(data.filieres);
-      setFiliere(data.filieres);
+      console.log(data.filiere);
+      setFiliere(data.filiere);
     },
   });
 
@@ -78,7 +77,7 @@ export default function ListFilieres() {
         >
           Liste des Départements
         </h1>
-        <AddFiliere />
+        {/* <AddFiliere /> */}
       </div>
       <nav className="lx" aria-label="Breadcrumb">
         <ol role="list" className="lx yz abj">
@@ -134,7 +133,7 @@ export default function ListFilieres() {
           <DataTable data={filieres} columns={columns} filter={"nom"} />
         )}
       </div>
-      <EditFiliere />
+      {/* <EditFiliere /> */}
     </>
   );
 }
