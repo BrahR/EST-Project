@@ -1,9 +1,8 @@
 import Modal from "@/components/Modal";
 import axiosInstance from "@/axios";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import type { ReactElement } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { updateDepartementMutation } from "@/atoms/departement";
 import { idDepartement, departementAtom } from "@/atoms/_departement";
 import { useAtom, useAtomValue } from "jotai";
 import { useMutation } from "react-query";
@@ -11,7 +10,7 @@ import { toast } from "react-hot-toast";
 
 type FormValues = {
   id: number;
-  name: string;
+  nom: string;
   description: string;
 };
 
@@ -19,7 +18,7 @@ export default function EditDepartement(): ReactElement {
   const [id, setId] = useAtom(idDepartement);
   const departement = useAtomValue(departementAtom);
   const [, setDepartement] = useAtom(departementAtom);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
 
   const login = useMutation({
     mutationFn: (data: FormValues) => {
@@ -67,7 +66,7 @@ export default function EditDepartement(): ReactElement {
           <button
             type="button"
             onClick={close}
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600"
+            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
             data-modal-toggle="crud-modal"
           >
             <svg

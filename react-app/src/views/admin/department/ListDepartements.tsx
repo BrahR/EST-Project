@@ -2,8 +2,8 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import { departementsAtom, idDepartement } from "@/atoms/_departement";
-import { useAtom, useAtomValue } from "jotai";
+import { departementsAtom, idDepartement, deleteDepartementAtom } from "@/atoms/_departement";
+import { useAtom } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
@@ -41,7 +41,7 @@ const columns: TableColumn<Departement>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} />,
+    cell: (row) => <BasicMenu id={row.id} editHandeler={idDepartement} deleteHandeler={deleteDepartementAtom}/>,
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",

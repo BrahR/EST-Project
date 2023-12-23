@@ -1,7 +1,6 @@
 import { departementsAtom } from "@/atoms/_departement";
 import { filieresAtom } from "@/atoms/filiere";
 import axiosInstance from "@/axios";
-import { Departement } from "@/types/modals";
 import { ReactElement, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -18,11 +17,11 @@ type FormValues = {
 };
 
 export default function AddFiliere(): ReactElement {
-    const departement = useAtomValue(departementsAtom);
-    const [departements, setDepartment] = useAtom(departementsAtom);
+    const departements = useAtomValue(departementsAtom);
+    const [, setDepartment] = useAtom(departementsAtom);
 
     useEffect(() => {
-        if (departement.length === 0) {
+        if (departements.length === 0) {
             const fetchData = async () => {
                 try {
                     const data = await axiosInstance.get('/departements').then((res) => res.data.departements);
@@ -43,7 +42,6 @@ export default function AddFiliere(): ReactElement {
 
     const add = useMutation({
         mutationFn: (data: FormValues) => {
-            console.log("data", data);
             return axiosInstance.post('/filieres', data).then((res) => res.data);
         },
         onSuccess: (data) => {
@@ -53,7 +51,7 @@ export default function AddFiliere(): ReactElement {
         },
         onError: () => {
             console.log("looks like an error to me");
-            toast.error("Identifiant ou mot de passe incorrect");
+            toast.error("Filière non ajouté *-*");
         },
     });
 

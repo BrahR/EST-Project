@@ -2,15 +2,15 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
 import DataTable from "@/components/DataTable";
-import { filieresAtom, idFiliere } from "@/atoms/filiere";
-import { useAtom, useAtomValue } from "jotai";
+import { filieresAtom, idFiliere, deleteFiliereAtom } from "@/atoms/filiere";
+import { useAtom} from "jotai";
 import type { Filiere } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { useQuery } from "react-query";
 import axiosInstance from "@/axios";
-//import EditFiliere from "./EditFiliere";
+import EditFiliere from "@/views/admin/filiere/EditFiliere";
 
 const columns: TableColumn<Filiere>[] = [
   {
@@ -48,7 +48,7 @@ const columns: TableColumn<Filiere>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} />,
+    cell: (row) => <BasicMenu id={row.id} editHandeler={idFiliere} deleteHandeler={deleteFiliereAtom}/>,
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -133,7 +133,7 @@ export default function ListFilieres() {
           <DataTable data={filieres} columns={columns} filter={"nom"} />
         )}
       </div>
-      {/* <EditFiliere /> */}
+      <EditFiliere />
     </>
   );
 }
