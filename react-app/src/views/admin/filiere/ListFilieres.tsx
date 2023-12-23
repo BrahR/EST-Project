@@ -1,6 +1,6 @@
 import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
-//import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
+import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
 import DataTable from "@/components/DataTable";
 import { filieresAtom, idFiliere } from "@/atoms/filiere";
 import { useAtom, useAtomValue } from "jotai";
@@ -75,9 +75,9 @@ export default function ListFilieres() {
           style={{ fontSize: "24px", fontWeight: "bold", color: "#333" }}
           className="flex-grow"
         >
-          Liste des Départements
+          Liste des Filières
         </h1>
-        {/* <AddFiliere /> */}
+        <AddFiliere />
       </div>
       <nav className="lx" aria-label="Breadcrumb">
         <ol role="list" className="lx yz abj">
@@ -117,7 +117,7 @@ export default function ListFilieres() {
                 />
               </svg>
               <a href="#" className="jx awa awe axr bkz">
-                Départements
+                Filières
               </a>
             </div>
           </li>
