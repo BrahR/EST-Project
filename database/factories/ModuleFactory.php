@@ -25,7 +25,7 @@ class ModuleFactory extends Factory
     {
         $filiere = Filiere::inRandomOrder()->first();
         return [
-            'nom' =>  $this->faker->unique()->word,
+            'nom' => "Module de ". $this->faker->unique()->word,
             'description' =>  $this->faker->sentence,
             'filiere_id' => $filiere->id ,
         ];

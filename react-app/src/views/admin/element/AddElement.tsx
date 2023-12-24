@@ -1,61 +1,85 @@
 import axiosInstance from "@/axios";
-import { useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
+import { ReactElement, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
-import { ReactElement } from "react";
 import Modal from "@/components/Modal";
-import { departementsAtom } from "@/atoms/_departement";
-import { filiereAtom, idFiliere } from "@/atoms/filiere";
+import { useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 
+
+import { modulesAtom } from "@/atoms/module";
+import { elementsAtom } from "@/atoms/element";
 
 type FormValues = {
     id: number;
     nom: string;
     description: string;
-    departement_id: number;
+    module_id: number;
 };
 
-export default function EditFiliere(): ReactElement {
-    const departements = useAtomValue(departementsAtom);
-    const [id, setId] = useAtom(idFiliere);
-    const filiere = useAtomValue(filiereAtom);
-    const [, setFiliere] = useAtom(filiereAtom);
-    const { register, handleSubmit, reset } = useForm<FormValues>();
+export default function AddElement(): ReactElement {
+    const module = useAtomValue(modulesAtom);
+    const [, setModule] = useAtom(modulesAtom);
 
-    const edit = useMutation({
+    useEffect(() => {
+        if (module.length === 0) {
+            const fetchData =async () => {
+                try {
+                    const data = await axiosInstance.get('/modules').then((res) => res.data.filiere);
+                    setModule(data);
+                } catch (error) {
+                    console.error("Couldn't get the modules *-*",error);
+                }
+            };
+
+            fetchData();
+        }
+    }, [module, setModule]);
+
+    const [elements, setElements] = useAtom(elementsAtom);
+    const {register, handleSubmit} = useForm<FormValues>();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const add = useMutation({
         mutationFn: (data: FormValues) => {
-            return axiosInstance.put(`/filieres/${id}`, data).then((res) => res.data)
+            return axiosInstance.post('/elements', data).then((res) => res.data);
         },
         onSuccess: (data) => {
-            console.log("Filiere:", filiere);
-            setFiliere(data.filiere);
-            toast.success("Filiere modifié avec succès");
+            console.log("data", data);
+            setElements([...elements, data.element]);
+            toast.success("Element ajoutée avec success!");
         },
-        onError: (data: any) => {
+        onError: () => {
             console.log("looks like an error to me");
-            console.log(data.message);
-            toast.error("Couldnt edit Filiere *-*");
+            toast.error("Element non ajouté *-*");
         },
     });
 
-    useEffect(() => {
-        reset({
-            ...filiere,
-        });
-    }, [filiere, reset]);
-
     function close() {
-        setId(0);
-    }
+        setIsOpen(false);
+    };
+
+    function open() {
+        setIsOpen(true);
+    };
 
     return (
         <div>
-            <Modal isOpen={!!id} closeModal={close}>
+            <button
+                onClick={open}
+                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+                data-modal-target="crud-modal"
+                data-modal-toggle="crud-modal"
+            >
+                Ajouter un Elément de Module
+            </button>
+
+            <Modal isOpen={isOpen} closeModal={close}>
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                     <h3 className="text-lg font-semibold text-gray-900">
-                        Modifier Filière
+                        Nouveau Element de Module
                     </h3>
                     <button
                         type="button"
@@ -81,7 +105,10 @@ export default function EditFiliere(): ReactElement {
                         <span className="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form className="p-4 md:p-5" onSubmit={handleSubmit((data) => edit.mutate(data))}>
+                <form
+                    className="p-4 md:p-5"
+                    onSubmit={handleSubmit((data) => add.mutate(data))}
+                >
                     <div className="grid gap-4 mb-4 grid-cols-2">
                         <div className="col-span-2">
                             <label
@@ -99,22 +126,22 @@ export default function EditFiliere(): ReactElement {
                         </div>
                         <div className="col-span-2">
                             <label
-                                htmlFor="departement"
+                                htmlFor="module"
                                 className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                                Département
+                                Module
                             </label>
                             <select
-                                id="departement_id"
+                                id="module_id"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                {...register("departement_id", { required: true })}
+                                {...register('module_id', { required: true })}
                             >
-                                <option value={filiere?.departement.id} disabled>
-                                    {filiere?.departement.nom}
+                                <option value='' disabled>
+                                    Sélectionnez un module
                                 </option>
-                                {departements.map((departement) => (
-                                    <option key={departement.id} value={departement.id}>
-                                        {departement.nom}
+                                {module.map((module) => (
+                                    <option key={module.id} value={module.id}>
+                                        {module.nom}
                                     </option>
                                 ))}
                             </select>
@@ -151,10 +178,10 @@ export default function EditFiliere(): ReactElement {
                                 clipRule="evenodd"
                             />
                         </svg>
-                        Modifier
+                        Ajouter
                     </button>
                 </form>
             </Modal>
         </div>
-    );
+    )
 }

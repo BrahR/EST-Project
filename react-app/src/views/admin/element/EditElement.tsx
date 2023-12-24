@@ -6,45 +6,45 @@ import toast from "react-hot-toast";
 import { useMutation } from "react-query";
 import { ReactElement } from "react";
 import Modal from "@/components/Modal";
-import { departementsAtom } from "@/atoms/_departement";
-import { filiereAtom, idFiliere } from "@/atoms/filiere";
 
+import { modulesAtom } from "@/atoms/module";
+import { elementAtom, idElement } from "@/atoms/element";
 
 type FormValues = {
     id: number;
     nom: string;
     description: string;
-    departement_id: number;
+    module_id: number;
 };
 
-export default function EditFiliere(): ReactElement {
-    const departements = useAtomValue(departementsAtom);
-    const [id, setId] = useAtom(idFiliere);
-    const filiere = useAtomValue(filiereAtom);
-    const [, setFiliere] = useAtom(filiereAtom);
+export default function EditElement(): ReactElement {
+    const modules = useAtomValue(modulesAtom);
+    const [id, setId] = useAtom(idElement);
+    const element = useAtomValue(elementAtom);
+    const [, setElement] = useAtom(elementAtom);
     const { register, handleSubmit, reset } = useForm<FormValues>();
 
     const edit = useMutation({
         mutationFn: (data: FormValues) => {
-            return axiosInstance.put(`/filieres/${id}`, data).then((res) => res.data)
+            return axiosInstance.put(`/elements/${id}`, data).then((res) => res.data)
         },
         onSuccess: (data) => {
-            console.log("Filiere:", filiere);
-            setFiliere(data.filiere);
-            toast.success("Filiere modifié avec succès");
+            console.log("Element:", element);
+            setElement(data.element);
+            toast.success("Element modifié avec succès");
         },
         onError: (data: any) => {
             console.log("looks like an error to me");
             console.log(data.message);
-            toast.error("Couldnt edit Filiere *-*");
+            toast.error("Couldnt edit Element *-*");
         },
     });
 
     useEffect(() => {
         reset({
-            ...filiere,
+            ...element,
         });
-    }, [filiere, reset]);
+    }, [element, reset]);
 
     function close() {
         setId(0);
@@ -55,7 +55,7 @@ export default function EditFiliere(): ReactElement {
             <Modal isOpen={!!id} closeModal={close}>
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
                     <h3 className="text-lg font-semibold text-gray-900">
-                        Modifier Filière
+                        Modifier Elément de Module
                     </h3>
                     <button
                         type="button"
@@ -99,22 +99,22 @@ export default function EditFiliere(): ReactElement {
                         </div>
                         <div className="col-span-2">
                             <label
-                                htmlFor="departement"
+                                htmlFor="module"
                                 className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                                Département
+                                Module
                             </label>
                             <select
-                                id="departement_id"
+                                id="module_id"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                {...register("departement_id", { required: true })}
+                                {...register("module_id", { required: true })}
                             >
-                                <option value={filiere?.departement.id} disabled>
-                                    {filiere?.departement.nom}
+                                <option value={element?.module.id} disabled>
+                                    {element?.module.nom}
                                 </option>
-                                {departements.map((departement) => (
-                                    <option key={departement.id} value={departement.id}>
-                                        {departement.nom}
+                                {modules.map((module) => (
+                                    <option key={module.id} value={module.id}>
+                                        {module.nom}
                                     </option>
                                 ))}
                             </select>
