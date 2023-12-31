@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 import type { Departement } from "@/types/modals";
 import axiosInstance from "@/axios";
+import toast from "react-hot-toast";
 
 export const idDepartement = atom(0);
 export const departementsAtom = atom<Departement[]>([]);
@@ -32,7 +33,14 @@ export const departementAtom = atom(
 
 export const deleteDepartementAtom = atom(null, (_get, set, id: number) => {
   const departements = _get(departementsAtom);
-  axiosInstance.delete(`/departements/${id}`);
+  axiosInstance
+    .delete(`/departements/${id}`)
+    .then(() => {
+      toast.success("Departement supprimé avec succès");
+    })
+    .catch(() => {
+      toast.error("Erreur lors de la suppression");
+    });
   set(
     departementsAtom,
     departements.filter((departement) => departement.id !== id)
