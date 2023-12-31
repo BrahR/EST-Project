@@ -12,6 +12,7 @@ class ElementController extends Controller{
         return response()->json(['element'=>$element]);
     }
 
+    
     public function store(Request $request){
         $validatedData=$request->validate([
             "nom" => "required|string",

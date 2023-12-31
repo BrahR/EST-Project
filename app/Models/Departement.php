@@ -21,7 +21,7 @@ class Departement extends Model
     public static function boot() {
         parent::boot();
 
-        static::deleting(function($departement) { // before delete() method call this
+         static::deleting(function($departement) { // before delete() method call this
              $departement->filieres->each(function($filiere) {
                 $filiere->modules->each(function($module) {
                     $module->elements->each(function($element) {
