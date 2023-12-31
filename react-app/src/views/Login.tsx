@@ -23,8 +23,9 @@ export default function Login(): ReactElement {
     },
   });
   const login = useMutation({
-    mutationFn: (data: FormValues) => {
-      return axiosInstance.post("/login", data).then((res) => res.data);
+    mutationFn: async (data: FormValues) => {
+      const res = await axiosInstance.post("/login", data);
+      return res.data;
     },
     onSuccess: (data: User) => {
       console.log("data", data);
@@ -34,7 +35,6 @@ export default function Login(): ReactElement {
       toast.success("Vous êtes connecté avec succès");
     },
     onError: () => {
-      // console.log("looks like an error to me");
       toast.error("Identifiant ou mot de passe incorrect");
     },
   });

@@ -1,32 +1,29 @@
 import more from "@/assets/more.png";
 import { Menu, Transition } from "@headlessui/react";
+import { useSetAtom } from "jotai";
 import { Fragment } from "react";
-import {
-  idDepartement,
-  departementAtom,
-  deleteDepartementAtom,
-} from "@/atoms/_departement";
-import { useAtomValue, useSetAtom } from "jotai";
+
 
 type Props = {
   id: number;
+  editHandeler: any;
+  deleteHandeler: any;
 };
 
 type IconProps = {
   active: boolean;
 };
 
-export default function BasicMenu({ id }: Props) {
-  const setIdDepartement = useSetAtom(idDepartement);
-  const setDepartement = useSetAtom(departementAtom);
-  const deleteDepartement = useSetAtom(deleteDepartementAtom);
+export default function BasicMenu({id, editHandeler, deleteHandeler}: Props) {
 
+  const setId = useSetAtom(editHandeler);
+  const remove = useSetAtom(deleteHandeler);
   const handleEdit = () => {
-    setIdDepartement(id);
+    setId(id);
   };
 
   const handleDelete = () => {
-    deleteDepartement(id);
+    remove(id);
     console.log("eee");
   };
 

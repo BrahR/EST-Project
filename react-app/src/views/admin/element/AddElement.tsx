@@ -1,43 +1,62 @@
-import Modal from "@/components/Modal";
 import axiosInstance from "@/axios";
-import { useState } from "react";
+import Modal from "@/components/Modal";
+import toast from "react-hot-toast";
+import { ReactElement, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAtom } from "jotai";
-import { departementsAtom } from "@/atoms/_departement";
 import { useMutation } from "react-query";
-import { toast } from "react-hot-toast";
-import type { ReactElement } from "react";
-import SubmitButton from "@/components/SubmitButton";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import { modulesAtom } from "@/atoms/module";
+import { elementsAtom } from "@/atoms/element";
 
 type FormValues = {
   id: number;
   nom: string;
   description: string;
+  module_id: number;
 };
 
-export default function AddDepartement(): ReactElement {
-  const [departements, setDepartement] = useAtom(departementsAtom);
-  const { register, handleSubmit, reset } = useForm<FormValues>();
+export default function AddElement(): ReactElement {
+  const [module, setModule] = useAtom(modulesAtom);
+
+  useEffect(() => {
+    if (!module || module?.length === 0) {
+      const fetchData = async () => {
+        try {
+          const data = await axiosInstance
+            .get("/modules")
+            .then((res) => res.data.module);
+          setModule(data);
+        } catch (error) {
+          console.error("Couldn't get the modules *-*", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [module, setModule]);
+
+  const [elements, setElements] = useAtom(elementsAtom);
+  const { register, handleSubmit } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: (data: FormValues) => {
-      return axiosInstance.post(`/departements`, data).then((res) => res.data);
+  const add = useMutation({
+    mutationFn: async (data: FormValues) => {
+      return axiosInstance.post("/elements", data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      setDepartement([...departements, data.departements]);
-      toast.success("Département ajouté avec succès");
-      close();
+      console.log("data", data);
+      setElements([...elements, data.element]);
+      toast.success("Element ajoutée avec success!");
     },
     onError: () => {
       console.log("looks like an error to me");
-      toast.error("Erreur lors de l'ajout du département");
+      toast.error("Element non ajouté *-*");
     },
   });
 
   function close() {
     setIsOpen(false);
-    reset();
   }
 
   function open() {
@@ -53,13 +72,13 @@ export default function AddDepartement(): ReactElement {
         data-modal-target="crud-modal"
         data-modal-toggle="crud-modal"
       >
-        Ajouter un Département
+        Ajouter un Elément de Module
       </button>
 
       <Modal isOpen={isOpen} closeModal={close}>
         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
           <h3 className="text-lg font-semibold text-gray-900">
-            Nouveau Département
+            Nouveau Element de Module
           </h3>
           <button
             type="button"
@@ -87,7 +106,7 @@ export default function AddDepartement(): ReactElement {
         </div>
         <form
           className="p-4 md:p-5"
-          onSubmit={handleSubmit((data) => mutate(data))}
+          onSubmit={handleSubmit((data) => add.mutate(data))}
         >
           <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
@@ -106,6 +125,29 @@ export default function AddDepartement(): ReactElement {
             </div>
             <div className="col-span-2">
               <label
+                htmlFor="module"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Module
+              </label>
+              <select
+                id="module_id"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                defaultValue=""
+                {...register("module_id", { required: true })}
+              >
+                <option value="" disabled selected>
+                  Sélectionnez un module
+                </option>
+                {module.map((module) => (
+                  <option key={module.id} value={module.id}>
+                    {module.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-span-2">
+              <label
                 htmlFor="description"
                 className="block mb-2 text-sm font-medium text-gray-900 "
               >
@@ -120,9 +162,24 @@ export default function AddDepartement(): ReactElement {
               ></textarea>
             </div>
           </div>
-          <SubmitButton action="add" loading={isLoading}>
+          <button
+            type="submit"
+            className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            <svg
+              className="me-1 -ms-1 w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
             Ajouter
-          </SubmitButton>
+          </button>
         </form>
       </Modal>
     </div>

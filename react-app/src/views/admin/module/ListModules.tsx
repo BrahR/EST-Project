@@ -1,22 +1,18 @@
+import axiosInstance from "@/axios";
+import AddModule from "@/views/admin/module/AddModule";
+import EditModule from "@/views/admin/module/EditModule";
 import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
-import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import {
-  departementsAtom,
-  idDepartement,
-  deleteDepartementAtom,
-} from "@/atoms/_departement";
-import { useAtom, useAtomValue } from "jotai";
-import type { Departement } from "@/types/modals";
-import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { useQuery } from "react-query";
-import axiosInstance from "@/axios";
-import EditDepartement from "./EditDepartement";
+import { useAtom, useAtomValue } from "jotai";
+import { modulesAtom, idModule, deleteModuleAtom } from "@/atoms/module";
+import type { Module } from "@/types/modals";
+import type { TableColumn } from "react-data-table-component";
 
-const columns: TableColumn<Departement>[] = [
+const columns: TableColumn<Module>[] = [
   {
     cell: () => <img src={AppsIcon} alt="icon" />,
     width: "56px",
@@ -29,7 +25,6 @@ const columns: TableColumn<Departement>[] = [
     name: "Nom",
     selector: (row) => row.nom,
     sortable: true,
-    grow: 2,
     style: {
       color: "#202124",
       fontSize: "14px",
@@ -45,11 +40,19 @@ const columns: TableColumn<Departement>[] = [
     },
   },
   {
+    name: "Filiere",
+    selector: (row) => row.filiere.nom,
+    sortable: true,
+    style: {
+      color: "rgba(0,0,0,.54)",
+    },
+  },
+  {
     cell: (row) => (
       <BasicMenu
         id={row.id}
-        editHandeler={idDepartement}
-        deleteHandeler={deleteDepartementAtom}
+        editHandeler={idModule}
+        deleteHandeler={deleteModuleAtom}
       />
     ),
     width: "80px",
@@ -60,14 +63,15 @@ const columns: TableColumn<Departement>[] = [
   },
 ];
 
-export default function ListDepartments() {
-  const [departements, setDepartment] = useAtom(departementsAtom);
-  const id = useAtomValue(idDepartement);
+export default function ListModules() {
+  const id = useAtomValue(idModule);
+  const [modules, setModules] = useAtom(modulesAtom);
 
   const { isLoading, isError, data } = useQuery({
-    queryFn: () => axiosInstance.get("/departements").then((res) => res.data),
+    queryFn: () => axiosInstance.get("/modules").then((res) => res.data),
     onSuccess: (data) => {
-      setDepartment(data.departements);
+      console.log(data.module);
+      setModules(data.module);
     },
   });
 
@@ -78,9 +82,9 @@ export default function ListDepartments() {
           style={{ fontSize: "24px", fontWeight: "bold", color: "#333" }}
           className="flex-grow"
         >
-          Liste des Départements
+          Liste des Filières
         </h1>
-        <AddDepartement />
+        <AddModule />
       </div>
       <nav className="lx" aria-label="Breadcrumb">
         <ol role="list" className="lx yz abj">
@@ -120,7 +124,7 @@ export default function ListDepartments() {
                 />
               </svg>
               <a href="#" className="jx awa awe axr bkz">
-                Départements
+                Filières
               </a>
             </div>
           </li>
@@ -132,11 +136,9 @@ export default function ListDepartments() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && (
-          <DataTable data={departements} columns={columns} filter={"nom"} />
-        )}
+        {data && <DataTable data={modules} columns={columns} filter={"nom"} />}
       </div>
-      {id != 0 && <EditDepartement />}
+      {id !== 0 && <EditModule />}
     </>
   );
 }

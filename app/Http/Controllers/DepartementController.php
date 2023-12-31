@@ -39,10 +39,10 @@ class DepartementController extends Controller
         $departement=Departement::find($id);
         if(!empty($departement)){
             $validatedData=$request->validate([
-                'titre'=> "string|required",
+                'nom'=> "string|required",
                 'description'=>'required',
             ]);
-            $departement->nom=$validatedData['titre'];
+            $departement->nom=$validatedData['nom'];
             $departement->description=$validatedData['description'];
             $departement->save();
             return response()->json(['departements' => $departement]);
