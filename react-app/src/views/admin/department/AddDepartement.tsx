@@ -1,12 +1,13 @@
 import Modal from "@/components/Modal";
+import axiosInstance from "@/axios";
 import { useState } from "react";
-import type { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { useAtom } from "jotai";
 import { departementsAtom } from "@/atoms/_departement";
 import { useMutation } from "react-query";
-import axiosInstance from "@/axios";
 import { toast } from "react-hot-toast";
+import type { ReactElement } from "react";
+import SubmitButton from "@/components/SubmitButton";
 
 type FormValues = {
   id: number;
@@ -15,29 +16,28 @@ type FormValues = {
 };
 
 export default function AddDepartement(): ReactElement {
-  // const [{ mutate }] = useAtom(addDepartementMutation);
   const [departements, setDepartement] = useAtom(departementsAtom);
-  // const setDepartement = useSetAtom(departementAtom);
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
 
-  const add = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: (data: FormValues) => {
       return axiosInstance.post(`/departements`, data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      console.log("data", data);
       setDepartement([...departements, data.departements]);
-      toast.success("Vous êtes connecté avec succès");
+      toast.success("Département ajouté avec succès");
+      close();
     },
     onError: () => {
       console.log("looks like an error to me");
-      toast.error("Identifiant ou mot de passe incorrect");
+      toast.error("Erreur lors de l'ajout du département");
     },
   });
 
   function close() {
     setIsOpen(false);
+    reset();
   }
 
   function open() {
@@ -87,7 +87,7 @@ export default function AddDepartement(): ReactElement {
         </div>
         <form
           className="p-4 md:p-5"
-          onSubmit={handleSubmit((data) => add.mutate(data))}
+          onSubmit={handleSubmit((data) => mutate(data))}
         >
           <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
@@ -120,24 +120,9 @@ export default function AddDepartement(): ReactElement {
               ></textarea>
             </div>
           </div>
-          <button
-            type="submit"
-            className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            <svg
-              className="me-1 -ms-1 w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
+          <SubmitButton action="add" loading={isLoading}>
             Ajouter
-          </button>
+          </SubmitButton>
         </form>
       </Modal>
     </div>

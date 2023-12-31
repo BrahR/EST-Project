@@ -1,17 +1,16 @@
+import AddElement from "@/views/admin/element/AddElement";
+import EditElement from "@/views/admin/element/EditElement";
 import AppsIcon from "@/assets/apps.png";
+import Error from "@/components/Error";
 import BasicMenu from "@/components/Menu";
 import DataTable from "@/components/DataTable";
-import { useAtom} from "jotai";
-import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
-import Error from "@/components/Error";
+import { useAtom, useAtomValue } from "jotai";
 import { useQuery } from "react-query";
 import axiosInstance from "@/axios";
-
-import type { Element } from "@/types/modals"
 import { elementsAtom, idElement, deleteElementAtom } from "@/atoms/element";
-import EditElement from "@/views/admin/element/EditElement";
-import AddElement from "@/views/admin/element/AddElement"; 
+import type { TableColumn } from "react-data-table-component";
+import type { Element } from "@/types/modals";
 
 const columns: TableColumn<Element>[] = [
   {
@@ -49,7 +48,13 @@ const columns: TableColumn<Element>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} editHandeler={idElement} deleteHandeler={deleteElementAtom}/>,
+    cell: (row) => (
+      <BasicMenu
+        id={row.id}
+        editHandeler={idElement}
+        deleteHandeler={deleteElementAtom}
+      />
+    ),
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -59,6 +64,7 @@ const columns: TableColumn<Element>[] = [
 ];
 
 export default function ListElements() {
+  const id = useAtomValue(idElement);
   const [elements, setElements] = useAtom(elementsAtom);
 
   const { isLoading, isError, data } = useQuery({
@@ -130,11 +136,9 @@ export default function ListElements() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && (
-          <DataTable data={elements} columns={columns} filter={"nom"} />
-        )}
+        {data && <DataTable data={elements} columns={columns} filter={"nom"} />}
       </div>
-      <EditElement />
+      {id !== 0 && <EditElement />}
     </>
   );
 }

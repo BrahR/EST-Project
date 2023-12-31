@@ -1,12 +1,13 @@
 import Modal from "@/components/Modal";
 import axiosInstance from "@/axios";
-import { useEffect} from "react";
-import type { ReactElement } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import SubmitButton from "@/components/SubmitButton";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { idDepartement, departementAtom } from "@/atoms/_departement";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useMutation } from "react-query";
 import { toast } from "react-hot-toast";
+import type { ReactElement } from "react";
 
 type FormValues = {
   id: number;
@@ -16,27 +17,23 @@ type FormValues = {
 
 export default function EditDepartement(): ReactElement {
   const [id, setId] = useAtom(idDepartement);
-  const departement = useAtomValue(departementAtom);
-  const [, setDepartement] = useAtom(departementAtom);
+  const [departement, setDepartement] = useAtom(departementAtom);
   const { register, handleSubmit, reset } = useForm<FormValues>();
 
-  const login = useMutation({
-    mutationFn: (data: FormValues) => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async (data: FormValues) => {
       return axiosInstance
         .put(`/departements/${id}`, data)
         .then((res) => res.data);
     },
     onSuccess: (data) => {
-      console.log("data", data);
-      // console.log("Logging in");
-      // setUser(data);
-      // navigate("/dashboard");
       setDepartement(data.departements);
-      toast.success("Vous êtes connecté avec succès");
+      toast.success("Département modifié avec succès");
+      close();
     },
     onError: () => {
       console.log("looks like an error to me");
-      toast.error("Identifiant ou mot de passe incorrect");
+      toast.error("Erreur lors de la modification du département");
     },
   });
 
@@ -45,12 +42,6 @@ export default function EditDepartement(): ReactElement {
       ...departement,
     });
   }, [departement, reset]);
-
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    // mutate(data.id);
-    login.mutate(data);
-    // close();
-  };
 
   function close() {
     setId(0);
@@ -87,7 +78,10 @@ export default function EditDepartement(): ReactElement {
             <span className="sr-only">Close modal</span>
           </button>
         </div>
-        <form className="p-4 md:p-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="p-4 md:p-5"
+          onSubmit={handleSubmit((data) => mutate(data))}
+        >
           <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
               <label
@@ -119,24 +113,9 @@ export default function EditDepartement(): ReactElement {
               ></textarea>
             </div>
           </div>
-          <button
-            type="submit"
-            className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            <svg
-              className="me-1 -ms-1 w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
+          <SubmitButton action="edit" loading={isLoading}>
             Modifier
-          </button>
+          </SubmitButton>
         </form>
       </Modal>
     </div>

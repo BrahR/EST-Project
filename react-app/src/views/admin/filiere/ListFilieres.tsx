@@ -1,16 +1,16 @@
+import axiosInstance from "@/axios";
 import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
-import AddFiliere from "@/views/admin/filiere/AddFiliere"; 
+import AddFiliere from "@/views/admin/filiere/AddFiliere";
 import DataTable from "@/components/DataTable";
-import { filieresAtom, idFiliere, deleteFiliereAtom } from "@/atoms/filiere";
-import { useAtom} from "jotai";
-import type { Filiere } from "@/types/modals";
-import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
-import Error from "@/components/Error";
-import { useQuery } from "react-query";
-import axiosInstance from "@/axios";
 import EditFiliere from "@/views/admin/filiere/EditFiliere";
+import Error from "@/components/Error";
+import { filieresAtom, idFiliere, deleteFiliereAtom } from "@/atoms/filiere";
+import { useAtom, useAtomValue } from "jotai";
+import { useQuery } from "react-query";
+import type { TableColumn } from "react-data-table-component";
+import type { Filiere } from "@/types/modals";
 
 const columns: TableColumn<Filiere>[] = [
   {
@@ -48,7 +48,13 @@ const columns: TableColumn<Filiere>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} editHandeler={idFiliere} deleteHandeler={deleteFiliereAtom}/>,
+    cell: (row) => (
+      <BasicMenu
+        id={row.id}
+        editHandeler={idFiliere}
+        deleteHandeler={deleteFiliereAtom}
+      />
+    ),
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -58,12 +64,12 @@ const columns: TableColumn<Filiere>[] = [
 ];
 
 export default function ListFilieres() {
+  const id = useAtomValue(idFiliere);
   const [filieres, setFiliere] = useAtom(filieresAtom);
 
   const { isLoading, isError, data } = useQuery({
     queryFn: () => axiosInstance.get("/filieres").then((res) => res.data),
     onSuccess: (data) => {
-      console.log(data.filiere);
       setFiliere(data.filiere);
     },
   });
@@ -129,11 +135,9 @@ export default function ListFilieres() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && (
-          <DataTable data={filieres} columns={columns} filter={"nom"} />
-        )}
+        {data && <DataTable data={filieres} columns={columns} filter={"nom"} />}
       </div>
-      <EditFiliere />
+      {id !== 0 && <EditFiliere />}
     </>
   );
 }

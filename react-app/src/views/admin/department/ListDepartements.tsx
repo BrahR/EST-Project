@@ -2,8 +2,12 @@ import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import AddDepartement from "@/views/admin/department/AddDepartement";
 import DataTable from "@/components/DataTable";
-import { departementsAtom, idDepartement, deleteDepartementAtom } from "@/atoms/_departement";
-import { useAtom } from "jotai";
+import {
+  departementsAtom,
+  idDepartement,
+  deleteDepartementAtom,
+} from "@/atoms/_departement";
+import { useAtom, useAtomValue } from "jotai";
 import type { Departement } from "@/types/modals";
 import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
@@ -41,7 +45,13 @@ const columns: TableColumn<Departement>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} editHandeler={idDepartement} deleteHandeler={deleteDepartementAtom}/>,
+    cell: (row) => (
+      <BasicMenu
+        id={row.id}
+        editHandeler={idDepartement}
+        deleteHandeler={deleteDepartementAtom}
+      />
+    ),
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -52,12 +62,11 @@ const columns: TableColumn<Departement>[] = [
 
 export default function ListDepartments() {
   const [departements, setDepartment] = useAtom(departementsAtom);
-  // const id = useAtomValue(idDepartement);
+  const id = useAtomValue(idDepartement);
 
   const { isLoading, isError, data } = useQuery({
     queryFn: () => axiosInstance.get("/departements").then((res) => res.data),
     onSuccess: (data) => {
-      console.log(data.departements);
       setDepartment(data.departements);
     },
   });
@@ -127,7 +136,7 @@ export default function ListDepartments() {
           <DataTable data={departements} columns={columns} filter={"nom"} />
         )}
       </div>
-      <EditDepartement />
+      {id != 0 && <EditDepartement />}
     </>
   );
 }

@@ -1,17 +1,16 @@
+import axiosInstance from "@/axios";
+import AddModule from "@/views/admin/module/AddModule";
+import EditModule from "@/views/admin/module/EditModule";
 import AppsIcon from "@/assets/apps.png";
 import BasicMenu from "@/components/Menu";
 import DataTable from "@/components/DataTable";
-import { useAtom} from "jotai";
-import type { TableColumn } from "react-data-table-component";
 import Loading from "@/components/Loading";
 import Error from "@/components/Error";
 import { useQuery } from "react-query";
-import axiosInstance from "@/axios";
-
-import type { Module } from "@/types/modals";
+import { useAtom, useAtomValue } from "jotai";
 import { modulesAtom, idModule, deleteModuleAtom } from "@/atoms/module";
-import EditModule from "@/views/admin/module/EditModule";
-import AddModule from "@/views/admin/module/AddModule"; 
+import type { Module } from "@/types/modals";
+import type { TableColumn } from "react-data-table-component";
 
 const columns: TableColumn<Module>[] = [
   {
@@ -49,7 +48,13 @@ const columns: TableColumn<Module>[] = [
     },
   },
   {
-    cell: (row) => <BasicMenu id={row.id} editHandeler={idModule} deleteHandeler={deleteModuleAtom}/>,
+    cell: (row) => (
+      <BasicMenu
+        id={row.id}
+        editHandeler={idModule}
+        deleteHandeler={deleteModuleAtom}
+      />
+    ),
     width: "80px",
     style: {
       borderBottom: "1px solid #FFFFFF",
@@ -59,6 +64,7 @@ const columns: TableColumn<Module>[] = [
 ];
 
 export default function ListModules() {
+  const id = useAtomValue(idModule);
   const [modules, setModules] = useAtom(modulesAtom);
 
   const { isLoading, isError, data } = useQuery({
@@ -130,11 +136,9 @@ export default function ListModules() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && (
-          <DataTable data={modules} columns={columns} filter={"nom"} />
-        )}
+        {data && <DataTable data={modules} columns={columns} filter={"nom"} />}
       </div>
-      <EditModule />
+      {id !== 0 && <EditModule />}
     </>
   );
 }
