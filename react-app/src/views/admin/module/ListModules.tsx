@@ -41,7 +41,7 @@ const columns: TableColumn<Module>[] = [
   },
   {
     name: "Filiere",
-    selector: (row) => row.filiere.nom,
+    selector: (row) => row.filiere?.nom ?? "",
     sortable: true,
     style: {
       color: "rgba(0,0,0,.54)",
@@ -68,10 +68,13 @@ export default function ListModules() {
   const [modules, setModules] = useAtom(modulesAtom);
 
   const { isLoading, isError, data } = useQuery({
-    queryFn: () => axiosInstance.get("/modules").then((res) => res.data),
-    onSuccess: (data) => {
-      console.log(data.module);
-      setModules(data.module);
+    queryFn: () => {
+      if (modules?.length > 0) return modules;
+      return axiosInstance.get("/modules").then((res) => res.data.module);
+    },
+    onSuccess: (module) => {
+      console.log(module);
+      setModules(module);
     },
   });
 
@@ -136,7 +139,9 @@ export default function ListModules() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && <DataTable data={modules} columns={columns} filter={"nom"} />}
+        {data && (
+          <DataTable data={modules} columns={columns} filter={"nom"} />
+        )}
       </div>
       {id !== 0 && <EditModule />}
     </>

@@ -65,9 +65,10 @@ export default function ListDepartments() {
   const id = useAtomValue(idDepartement);
 
   const { isLoading, isError, data } = useQuery({
-    queryFn: () => axiosInstance.get("/departements").then((res) => res.data),
-    onSuccess: (data) => {
-      setDepartment(data.departements);
+    queryFn: () =>
+      axiosInstance.get("/departements").then((res) => res.data.departements),
+    onSuccess: (departements) => {
+      setDepartment(departements);
     },
   });
 

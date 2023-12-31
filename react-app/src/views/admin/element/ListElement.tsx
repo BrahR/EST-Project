@@ -41,7 +41,7 @@ const columns: TableColumn<Element>[] = [
   },
   {
     name: "Module",
-    selector: (row) => row.module.nom,
+    selector: (row) => row.module?.nom ?? "",
     sortable: true,
     style: {
       color: "rgba(0,0,0,.54)",
@@ -68,10 +68,12 @@ export default function ListElements() {
   const [elements, setElements] = useAtom(elementsAtom);
 
   const { isLoading, isError, data } = useQuery({
-    queryFn: () => axiosInstance.get("/elements").then((res) => res.data),
-    onSuccess: (data) => {
-      console.log(data.element);
-      setElements(data.element);
+    queryFn: () => {
+      if (elements?.length > 0) return elements;
+      return axiosInstance.get("/elements").then((res) => res.data.element);
+    },
+    onSuccess: (element) => {
+      setElements(element);
     },
   });
 

@@ -37,7 +37,7 @@ export default function AddElement(): ReactElement {
   }, [module, setModule]);
 
   const [elements, setElements] = useAtom(elementsAtom);
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
 
   const add = useMutation({
@@ -48,6 +48,7 @@ export default function AddElement(): ReactElement {
       console.log("data", data);
       setElements([...elements, data.element]);
       toast.success("Element ajoutée avec success!");
+      close();
     },
     onError: () => {
       console.log("looks like an error to me");
@@ -57,6 +58,7 @@ export default function AddElement(): ReactElement {
 
   function close() {
     setIsOpen(false);
+    reset();
   }
 
   function open() {
@@ -136,10 +138,10 @@ export default function AddElement(): ReactElement {
                 defaultValue=""
                 {...register("module_id", { required: true })}
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Sélectionnez un module
                 </option>
-                {module.map((module) => (
+                {module?.map((module) => (
                   <option key={module.id} value={module.id}>
                     {module.nom}
                   </option>

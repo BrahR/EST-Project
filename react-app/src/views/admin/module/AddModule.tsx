@@ -39,7 +39,7 @@ export default function AddModule(): ReactElement {
   }, [filieres, setFilieres]);
 
   const [modules, setModules] = useAtom(modulesAtom);
-  const { register, handleSubmit } = useForm<FormValues>();
+  const { register, handleSubmit, reset } = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
 
   const add = useMutation({
@@ -50,6 +50,7 @@ export default function AddModule(): ReactElement {
       console.log("data", data);
       setModules([...modules, data.module]);
       toast.success("Module ajoutée avec success!");
+      close();
     },
     onError: () => {
       console.log("looks like an error to me");
@@ -59,6 +60,7 @@ export default function AddModule(): ReactElement {
 
   function close() {
     setIsOpen(false);
+    reset();
   }
 
   function open() {

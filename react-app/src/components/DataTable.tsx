@@ -37,7 +37,8 @@ export default function DataTableView<T extends object>(props: {
 }) {
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const data = props.data ?? [];
+  const data = props?.data ?? [];
+  console.log(data);
   const filteredItems = data.filter(
     (item) =>
       item[props.filter] &&

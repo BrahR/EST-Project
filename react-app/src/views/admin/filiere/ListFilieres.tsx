@@ -7,7 +7,7 @@ import Loading from "@/components/Loading";
 import EditFiliere from "@/views/admin/filiere/EditFiliere";
 import Error from "@/components/Error";
 import { filieresAtom, idFiliere, deleteFiliereAtom } from "@/atoms/filiere";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useQuery } from "react-query";
 import type { TableColumn } from "react-data-table-component";
 import type { Filiere } from "@/types/modals";
@@ -41,7 +41,7 @@ const columns: TableColumn<Filiere>[] = [
   },
   {
     name: "Departement",
-    selector: (row) => row.departement.nom,
+    selector: (row) => row.departement?.nom ?? "",
     sortable: true,
     style: {
       color: "rgba(0,0,0,.54)",
@@ -64,13 +64,15 @@ const columns: TableColumn<Filiere>[] = [
 ];
 
 export default function ListFilieres() {
-  const id = useAtomValue(idFiliere);
   const [filieres, setFiliere] = useAtom(filieresAtom);
 
   const { isLoading, isError, data } = useQuery({
-    queryFn: () => axiosInstance.get("/filieres").then((res) => res.data),
-    onSuccess: (data) => {
-      setFiliere(data.filiere);
+    queryFn: () => {
+      if (filieres?.length > 0) return filieres;
+      return axiosInstance.get("/filieres").then((res) => res.data.filiere);
+    },
+    onSuccess: (filiere) => {
+      setFiliere(filiere);
     },
   });
 
@@ -135,9 +137,11 @@ export default function ListFilieres() {
           Error(
             "Could not get the corresponding data. Check if the server is up!"
           )}
-        {data && <DataTable data={filieres} columns={columns} filter={"nom"} />}
+        {data && (
+          <DataTable data={filieres} columns={columns} filter={"nom"} />
+        )}
       </div>
-      {id !== 0 && <EditFiliere />}
+      <EditFiliere />
     </>
   );
 }
