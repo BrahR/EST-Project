@@ -5,8 +5,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ChefDepController;
 use App\Http\Controllers\ElementController;
 use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\EnseignentController;
 use App\Http\Controllers\DepartementController;
 
 /*
@@ -38,6 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'index', 'show', 'store', 'update', 'destroy'
     ]);
     Route::resource("/elements", ElementController::class)->only([
+        'index', 'show', 'store', 'update', 'destroy'
+    ]);
+    Route::resource("/chefDepartment", ChefDepController::class)->only([
+        'index', 'show', 'store', 'update', 'destroy'
+    ]);
+    Route::resource("/enseignant", EnseignentController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
 });
