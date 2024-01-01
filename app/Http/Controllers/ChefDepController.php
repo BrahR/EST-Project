@@ -10,9 +10,9 @@ class ChefDepController extends Controller
 {
     public function index()
     {
-        $chefDep = User::with('Departement:id,nom')
-        ->where('role', 'chef_de_departement')
-        ->get();
+        $chefDep = User::with('departement')
+            ->where('role', 'chef_de_departement')
+            ->get();
         return response()->json(['chefDep'=>$chefDep]);
     }
 
