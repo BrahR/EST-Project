@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource("/elements", ElementController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
-    Route::resource("/chefDepartment", ChefDepController::class)->only([
+    Route::resource("/chef-departement", ChefDepController::class)->only([
         'index', 'show', 'store', 'update', 'destroy'
     ]);
     Route::resource("/enseignant", EnseignentController::class)->only([

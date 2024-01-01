@@ -3,9 +3,6 @@ import type User from "@/types/modals/User";
 import type Filiere from "@/types/modals/Filiere";
 import type Module from "@/types/modals/Module";
 import type Element from "./Element";
+import type HeadDepartement from "./HeadDepartement";
 
-export type { Departement };
-export type { User };
-export type { Filiere };
-export type { Module };
-export type { Element };
+export type { Departement, User, Filiere, Module, Element, HeadDepartement };
