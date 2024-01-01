@@ -21,11 +21,10 @@ class DepartementFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
         return [
-            'nom' => "Génie " . $this->faker->unique()->word,
-            'description' =>  $this->faker->sentence,
-            'user_id' => $user->id ,
+            'nom' => "Génie " . $this->faker->unique()->jobTitle,
+            'description' =>  $this->faker->realText($maxNbChars = 30, $indexSize = 2),
+            'user_id' => User::where('role', 'chef_de_departement')->inRandomOrder()->first()->id,
         ];
     }
 }

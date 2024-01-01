@@ -24,8 +24,8 @@ class ElementFactory extends Factory
         $module = Module::inRandomOrder()->first();
         $user = User::inRandomOrder()->first();
         return [
-            'nom' =>  $this->faker->unique()->word,
-            'description' =>  $this->faker->sentence,
+            'nom' => $this->faker->unique()->jobTitle,
+            'description' => $this->faker->realText($maxNbChars = 30, $indexSize = 2),
             'user_id' => $user->id ,
             'module_id' => $module->id ,
         ];
